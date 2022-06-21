@@ -1,4 +1,4 @@
-import { StyleSheet, View, Pressable, ViewStyle } from 'react-native';
+import { StyleSheet, View, Pressable, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import CustomText from '../../components/common/CustomText/CustomText';
 import CustomTextInput from '../../components/common/CustomTextInput/CustomTextInput';
@@ -41,63 +41,33 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputsWrapper}>
-        {error && (
-          <CustomText style={styles.errorLabel}>Title is required</CustomText>
-        )}
-        <CustomTextInput
-          value={updatedTask.title}
-          multiline
-          style={[styles.titleInput, error ? styles.inputError : '']}
-          onChangeText={handleTitleChange}
-          placeholder="Title"
-          editable={!updatedTask.isChecked}
-          selectTextOnFocus={!updatedTask.isChecked}
-        ></CustomTextInput>
-        <CustomTextInput
-          value={updatedTask.description}
-          multiline
-          style={styles.descriptionInput}
-          onChangeText={handleDescriptionChange}
-          placeholder="Description"
-          editable={!updatedTask.isChecked}
-          selectTextOnFocus={!updatedTask.isChecked}
-        ></CustomTextInput>
-      </View>
-      <View style={styles.buttonsWrapper}>
-        {newTask ? (
-          <Pressable
-            style={[
-              styles.button,
-              styles.doneButton,
-              {
-                backgroundColor: ThemeColors.green,
-              },
-            ]}
-            onPress={handleCreateOrUpdateTask}
-          >
-            <CustomText style={styles.buttonText}>Create new task</CustomText>
-          </Pressable>
-        ) : (
-          <View>
-            <Pressable
-              style={[
-                styles.button,
-                styles.doneButton,
-                {
-                  backgroundColor: updatedTask.isChecked
-                    ? ThemeColors.orange
-                    : ThemeColors.green,
-                },
-              ]}
-              onPress={handleCheckDone}
-            >
-              <CustomText style={styles.buttonText}>
-                {updatedTask.isChecked ? 'Mark as in progress' : 'Mark as done'}
-              </CustomText>
-            </Pressable>
-
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={styles.container}>
+        <View style={styles.inputsWrapper}>
+          {error && (
+            <CustomText style={styles.errorLabel}>Title is required</CustomText>
+          )}
+          <CustomTextInput
+            value={updatedTask.title}
+            multiline
+            style={[styles.titleInput, error ? styles.inputError : '']}
+            onChangeText={handleTitleChange}
+            placeholder="Title"
+            editable={!updatedTask.isChecked}
+            selectTextOnFocus={!updatedTask.isChecked}
+          ></CustomTextInput>
+          <CustomTextInput
+            value={updatedTask.description}
+            multiline
+            style={styles.descriptionInput}
+            onChangeText={handleDescriptionChange}
+            placeholder="Description"
+            editable={!updatedTask.isChecked}
+            selectTextOnFocus={!updatedTask.isChecked}
+          ></CustomTextInput>
+        </View>
+        <View style={styles.buttonsWrapper}>
+          {newTask ? (
             <Pressable
               style={[
                 styles.button,
@@ -108,12 +78,46 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
               ]}
               onPress={handleCreateOrUpdateTask}
             >
-              <CustomText style={styles.buttonText}>Update task</CustomText>
+              <CustomText style={styles.buttonText}>Create new task</CustomText>
             </Pressable>
-          </View>
-        )}
+          ) : (
+            <View>
+              <Pressable
+                style={[
+                  styles.button,
+                  styles.doneButton,
+                  {
+                    backgroundColor: updatedTask.isChecked
+                      ? ThemeColors.orange
+                      : ThemeColors.green,
+                  },
+                ]}
+                onPress={handleCheckDone}
+              >
+                <CustomText style={styles.buttonText}>
+                  {updatedTask.isChecked
+                    ? 'Mark as in progress'
+                    : 'Mark as done'}
+                </CustomText>
+              </Pressable>
+
+              <Pressable
+                style={[
+                  styles.button,
+                  styles.doneButton,
+                  {
+                    backgroundColor: ThemeColors.green,
+                  },
+                ]}
+                onPress={handleCreateOrUpdateTask}
+              >
+                <CustomText style={styles.buttonText}>Update task</CustomText>
+              </Pressable>
+            </View>
+          )}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -125,7 +129,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
     width: '100%',
   },
   inputsWrapper: {
@@ -156,7 +161,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: ThemeColors.inputBackgroundColor,
     padding: 10,
-    maxHeight: '50%',
     textAlignVertical: 'top',
     marginBottom: 10,
   },
