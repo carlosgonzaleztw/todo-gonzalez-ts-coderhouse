@@ -1,16 +1,14 @@
 import { StyleSheet, View, Pressable, ViewStyle } from 'react-native';
 import React, { useState } from 'react';
-import Header from '../../components/common/Header/Header';
 import CustomText from '../../components/common/CustomText/CustomText';
 import CustomTextInput from '../../components/common/CustomTextInput/CustomTextInput';
 import ThemeColors from '../../styles/colors';
-import { TaskType } from '../../types/task.type';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { MainStackParamList } from '../../navigation/MainNavigator';
 
-type Props = {
-  task: TaskType;
-};
+type Props = NativeStackScreenProps<MainStackParamList, 'TaskDetails'>;
 
-const TaskDetailsScreen = ({ navigation, route }) => {
+const TaskDetailsScreen = ({ navigation, route }: Props) => {
   const { task } = route.params;
 
   const [updatedTask, setUpdatedTask] = useState(task);

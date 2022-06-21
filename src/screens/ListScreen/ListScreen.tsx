@@ -5,16 +5,15 @@ import Header from '../../components/common/Header/Header';
 import CustomText from '../../components/common/CustomText/CustomText';
 import ThemeColors from '../../styles/colors';
 import { TaskType } from '../../types/task.type';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { MainStackParamList } from '../../navigation/MainNavigator';
 
-type Props = {
-  navigation: any;
-  route: any;
-};
+type Props = NativeStackScreenProps<MainStackParamList, 'List'>;
 
 const ListScreen = ({ navigation, route }: Props) => {
   const [tasks, setTasks] = useState<TaskType[]>([]);
 
-  let updatedTask: TaskType | null = null;
+  let updatedTask: TaskType | undefined = undefined;
   if (route?.params) updatedTask = route.params.updatedTask;
 
   const addTaskToList = (currentTask: TaskType) => {
@@ -38,8 +37,7 @@ const ListScreen = ({ navigation, route }: Props) => {
   };
 
   useEffect(() => {
-    console.log('RUNNING USE EFFECT');
-    if (updatedTask !== null) {
+    if (updatedTask !== undefined) {
       addTaskToList(updatedTask);
     }
   }, [updatedTask]);

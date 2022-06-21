@@ -4,10 +4,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ListScreen from '../screens/ListScreen/ListScreen';
 import TaskDetailsScreen from '../screens/TaskDetailsScreen/TaskDetailsScreen';
 import ThemeColors from '../styles/colors';
+import { TaskType } from '../types/task.type';
 
-const Stack = createNativeStackNavigator();
+export type MainStackParamList = {
+  List: { updatedTask?: TaskType };
+  TaskDetails: { task: TaskType };
+};
 
 const isIOS = Platform.OS === 'ios';
+
+const Stack = createNativeStackNavigator<MainStackParamList>();
 
 const MainNavigator = () => {
   return (
