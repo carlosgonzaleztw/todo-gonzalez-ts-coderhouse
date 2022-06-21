@@ -1,20 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
+import React from 'react';
+import { useFonts } from 'expo-font';
+import ThemeColors from './src/styles/colors';
+import Root from './src/Root';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const [loaded] = useFonts({
+    'poppins-regular': require('./assets/fonts/Poppins/Poppins-Regular.ttf'),
+    'poppins-bold': require('./assets/fonts/Poppins/Poppins-Bold.ttf'),
+    'poppins-italic': require('./assets/fonts/Poppins/Poppins-Italic.ttf'),
+  });
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  if (!loaded) {
+    return <ActivityIndicator size="large" color={ThemeColors.green} />;
+  }
+
+  return <Root />;
+}
