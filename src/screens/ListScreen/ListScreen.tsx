@@ -85,8 +85,8 @@ const ListScreen = ({ navigation, route }) => {
       </View>
       <TasksList
         tasks={tasks}
-        onTaskCheckChange={(task) => handleTaskCheckChange(task)}
-        onTaskDelete={(task) => handleTaskDelete(task)}
+        onTaskCheckChange={(task) => handleTaskCheckChange(task.id)}
+        onTaskDelete={(task) => handleTaskDelete(task.id)}
         onViewDetails={(task) => handleViewDetails(task)}
       ></TasksList>
     </View>
