@@ -34,7 +34,7 @@ const Task = ({ onDelete, onCheckChange, task, onViewDetails }: Props) => {
           styles.button,
           task.isChecked
             ? { backgroundColor: ThemeColors.disabledText }
-            : { backgroundColor: ThemeColors.green },
+            : { backgroundColor: ThemeColors.primary },
         ]}
         onPress={() => onDelete(task)}
       >
