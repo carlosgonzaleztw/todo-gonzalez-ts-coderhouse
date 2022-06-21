@@ -7,11 +7,14 @@ import ThemeColors from '../../styles/colors';
 import { TaskType } from '../../types/task.type';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainNavigator';
+import { generateTasks } from '../../data/fixture';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'List'>;
 
+const demoTasks = generateTasks(Math.floor(Math.random() * 20) + 1);
+
 const ListScreen = ({ navigation, route }: Props) => {
-  const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [tasks, setTasks] = useState<TaskType[]>(demoTasks);
 
   let updatedTask: TaskType | undefined = undefined;
   if (route?.params) updatedTask = route.params.updatedTask;
