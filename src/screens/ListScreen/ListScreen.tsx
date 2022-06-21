@@ -6,10 +6,16 @@ import CustomText from '../../components/common/CustomText/CustomText';
 import ThemeColors from '../../styles/colors';
 import { TaskType } from '../../types/task.type';
 
-const ListScreen = ({ navigation, route }) => {
+type Props = {
+  navigation: any;
+  route: any;
+};
+
+const ListScreen = ({ navigation, route }: Props) => {
   const [tasks, setTasks] = useState<TaskType[]>([]);
-  let updatedTask: TaskType;
-  route?.params ? (updatedTask = route.params.updatedTask) : '';
+
+  let updatedTask: TaskType | null = null;
+  if (route?.params) updatedTask = route.params.updatedTask;
 
   const addTaskToList = (currentTask: TaskType) => {
     const isNewTask = !tasks.some((task) => {
@@ -33,7 +39,7 @@ const ListScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     console.log('RUNNING USE EFFECT');
-    if (updatedTask !== undefined) {
+    if (updatedTask !== null) {
       addTaskToList(updatedTask);
     }
   }, [updatedTask]);
