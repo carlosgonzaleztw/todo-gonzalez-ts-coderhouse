@@ -16,9 +16,6 @@ const demoTasks = generateTasks(Math.floor(Math.random() * 20) + 1);
 const ListScreen = ({ navigation, route }: Props) => {
   const [tasks, setTasks] = useState<TaskType[]>(demoTasks);
 
-  let updatedTask: TaskType | undefined = undefined;
-  if (route?.params) updatedTask = route.params.updatedTask;
-
   const addTaskToList = (currentTask: TaskType) => {
     const isNewTask = !tasks.some((task) => {
       return task.id === currentTask.id;
@@ -40,10 +37,10 @@ const ListScreen = ({ navigation, route }: Props) => {
   };
 
   useEffect(() => {
-    if (updatedTask !== undefined) {
-      addTaskToList(updatedTask);
+    if (route.params?.updatedTask) {
+      addTaskToList(route.params.updatedTask);
     }
-  }, [updatedTask]);
+  }, [route.params?.updatedTask]);
 
   const handleTaskCheckChange = (id: number) => {
     const updatedTasks = tasks.map((task) => {

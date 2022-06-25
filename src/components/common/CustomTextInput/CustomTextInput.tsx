@@ -1,21 +1,13 @@
-import { StyleSheet, TextInput, ViewStyle } from 'react-native';
-import React, { FC } from 'react';
+import { StyleSheet, TextInput } from 'react-native';
+import React from 'react';
 
 type Props = {
   children?: React.ReactNode;
   [x: string]: any;
 };
 
-const CustomTextInput: React.FC<Props> = ({
-  style,
-  children,
-  ...props
-}: Props) => {
-  return (
-    <TextInput {...props} style={[styles.text, style]}>
-      {children}
-    </TextInput>
-  );
+const CustomTextInput: React.FC<Props> = ({ style, ...props }: Props) => {
+  return <TextInput {...props} style={[styles.text, style]} />;
 };
 
 export default CustomTextInput;

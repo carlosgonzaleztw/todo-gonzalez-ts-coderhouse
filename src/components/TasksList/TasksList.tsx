@@ -8,6 +8,7 @@ type Props = {
   onTaskCheckChange: (task: TaskType) => void;
   onTaskDelete: (task: TaskType) => void;
   onViewDetails: (task: TaskType) => void;
+  viewOnly?: boolean;
 };
 
 const TasksList = ({
@@ -15,6 +16,7 @@ const TasksList = ({
   onTaskCheckChange,
   onTaskDelete,
   onViewDetails,
+  viewOnly = false,
 }: Props) => {
   const renderItem = ({ item }: { item: TaskType }) => {
     return (
@@ -23,6 +25,7 @@ const TasksList = ({
         onCheckChange={() => onTaskCheckChange(item)}
         onDelete={() => onTaskDelete(item)}
         onViewDetails={() => onViewDetails(item)}
+        viewOnly={viewOnly}
       ></Task>
     );
   };

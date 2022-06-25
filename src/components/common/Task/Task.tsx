@@ -10,16 +10,38 @@ type Props = {
   onDelete: (task: TaskType) => void;
   onCheckChange: (task: TaskType) => void;
   onViewDetails: (task: TaskType) => void;
+  viewOnly?: boolean;
 };
 
-const Task = ({ onDelete, onCheckChange, task, onViewDetails }: Props) => {
+const Task = ({
+  onDelete,
+  onCheckChange,
+  task,
+  onViewDetails,
+  viewOnly = false,
+}: Props) => {
   return (
-    <View style={styles.root}>
-      <CheckBox
-        value={task.isChecked}
-        onValueChange={() => onCheckChange(task)}
-      ></CheckBox>
-      <Pressable style={styles.textWrapper} onPress={() => onViewDetails(task)}>
+    <View
+      style={[
+        styles.root,
+        viewOnly
+          ? { justifyContent: 'center' }
+          : { justifyContent: 'space-between' },
+      ]}
+    >
+      {!viewOnly && (
+        <CheckBox
+          value={task.isChecked}
+          onValueChange={() => onCheckChange(task)}
+        ></CheckBox>
+      )}
+      <Pressable
+        style={[
+          styles.textWrapper,
+          viewOnly ? { width: '100%' } : { width: '60%' },
+        ]}
+        onPress={() => onViewDetails(task)}
+      >
         <CustomText
           style={[task.isChecked ? styles.disabled : '', styles.title]}
         >
@@ -29,17 +51,19 @@ const Task = ({ onDelete, onCheckChange, task, onViewDetails }: Props) => {
           Press to see the details
         </CustomText>
       </Pressable>
-      <Pressable
-        style={[
-          styles.button,
-          task.isChecked
-            ? { backgroundColor: ThemeColors.disabledText }
-            : { backgroundColor: ThemeColors.primary },
-        ]}
-        onPress={() => onDelete(task)}
-      >
-        <CustomText style={styles.buttonText}>X</CustomText>
-      </Pressable>
+      {!viewOnly && (
+        <Pressable
+          style={[
+            styles.button,
+            task.isChecked
+              ? { backgroundColor: ThemeColors.disabledText }
+              : { backgroundColor: ThemeColors.primary },
+          ]}
+          onPress={() => onDelete(task)}
+        >
+          <CustomText style={styles.buttonText}>X</CustomText>
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -50,7 +74,6 @@ const styles = StyleSheet.create({
   root: {
     flexDirection: 'row',
     paddingHorizontal: 20,
-    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
   },

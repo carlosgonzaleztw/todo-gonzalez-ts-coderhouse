@@ -5,20 +5,21 @@ import ListScreen from '../screens/ListScreen/ListScreen';
 import TaskDetailsScreen from '../screens/TaskDetailsScreen/TaskDetailsScreen';
 import ThemeColors from '../styles/colors';
 import { TaskType } from '../types/task.type';
+import SearchScreen from '../screens/SearchScreen/SearchScreen';
 
-export type MainStackParamList = {
-  List: { updatedTask?: TaskType };
-  TaskDetails: { task: TaskType; viewOnly: boolean };
+export type SearchStackParamList = {
+  Search: {};
+  TaskDetails: { task: TaskType; viewOnly?: boolean };
 };
 
 const isIOS = Platform.OS === 'ios';
 
-const Stack = createNativeStackNavigator<MainStackParamList>();
+const Stack = createNativeStackNavigator<SearchStackParamList>();
 
-const MainNavigator = () => {
+const SearchNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="List"
+      initialRouteName="Search"
       screenOptions={{
         headerStyle: {
           backgroundColor: isIOS ? ThemeColors.white : ThemeColors.primary,
@@ -28,17 +29,17 @@ const MainNavigator = () => {
       }}
     >
       <Stack.Screen
-        name="List"
-        component={ListScreen}
+        name="Search"
+        component={SearchScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="TaskDetails"
         component={TaskDetailsScreen}
-        initialParams={{ viewOnly: false }}
+        initialParams={{ viewOnly: true }}
       />
     </Stack.Navigator>
   );
 };
 
-export default MainNavigator;
+export default SearchNavigator;
