@@ -20,7 +20,7 @@ const SearchScreen = ({ navigation, route }: Props) => {
       setTasks(demoTasks);
     } else {
       const filteredTask = demoTasks.filter((task) => {
-        return task.title.search(text) !== -1;
+        return task.title.toLowerCase().search(text.toLowerCase()) !== -1;
       });
 
       setTasks(filteredTask);
