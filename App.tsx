@@ -4,7 +4,8 @@ import { useFonts } from 'expo-font';
 import ThemeColors from './src/styles/colors';
 import Root from './src/Root';
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
+import store from './src/store/store';
 
 export default function App() {
   const [loaded] = useFonts({
@@ -18,8 +19,10 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Root />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Root />
+      </NavigationContainer>
+    </Provider>
   );
 }
