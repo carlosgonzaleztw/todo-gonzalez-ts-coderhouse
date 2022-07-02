@@ -9,9 +9,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainNavigator';
 import { useAppDispatch, useAppSelector } from '../../store/store-hooks';
 import {
+  deleteTask,
   selectTask,
   unselectTasks,
-} from '../../store/reducers/task-list.reducer';
+  updateTask,
+} from '../../store/reducers/task.slice';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'List'>;
 
@@ -23,42 +25,13 @@ const ListScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => setTasks(TASK_LIST), [TASK_LIST]);
 
-  const addTaskToList = (currentTask: TaskType) => {
-    const isNewTask = !tasks.some((task) => {
-      return task.id === currentTask.id;
-    });
-
-    if (isNewTask) {
-      setTasks([...tasks, currentTask]);
-    } else {
-      const updatedTasks = tasks.map((task) => {
-        if (task.id === currentTask.id) {
-          return currentTask;
-        } else {
-          return task;
-        }
-      });
-
-      setTasks(updatedTasks);
-    }
-  };
-
-  useEffect(() => {
-    if (route.params?.updatedTask) {
-      addTaskToList(route.params.updatedTask);
-    }
-  }, [route.params?.updatedTask]);
-
   const handleTaskCheckChange = (task: TaskType) => {
     const updatedTask = { ...task, isChecked: !task.isChecked };
-    // dispatch(updateTask(updatedTask));
+    dispatch(updateTask(updatedTask));
   };
 
   const handleTaskDelete = (id: number) => {
-    // const updatedTasks = tasks.filter((task) => {
-    //   return task.id !== id;
-    // });
-    // setTasks(updatedTasks);
+    dispatch(deleteTask(id));
   };
 
   const handleOnAddTask = () => {

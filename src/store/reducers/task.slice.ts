@@ -39,9 +39,23 @@ export const taskSlice = createSlice({
     unselectTasks: (state) => {
       state.selected = undefined;
     },
+    updateTask: (state, { payload }: PayloadAction<TaskType>) => {
+      const updatedList = state.list.map((task) => {
+        if (task.id === payload.id) {
+          return payload;
+        }
+        return task;
+      });
+      state.list = updatedList;
+    },
+    deleteTask: (state, { payload }: PayloadAction<number>) => {
+      const updatedList = state.list.filter((task) => task.id !== payload);
+      state.list = updatedList;
+    },
   },
 });
 
-export const { selectTask, unselectTasks, createTask } = taskSlice.actions;
+export const { selectTask, unselectTasks, createTask, deleteTask, updateTask } =
+  taskSlice.actions;
 
 export default taskSlice.reducer;

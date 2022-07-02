@@ -5,7 +5,7 @@ import {
   ScrollView,
   ViewStyle,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomText from '../../components/common/CustomText/CustomText';
 import CustomTextInput from '../../components/common/CustomTextInput/CustomTextInput';
 import ThemeColors from '../../styles/colors';
@@ -14,7 +14,7 @@ import { MainStackParamList } from '../../navigation/MainNavigator';
 import { useSelector } from 'react-redux';
 import { TaskType } from '../../types/task.type';
 import { RootState } from '../../store/store';
-import { createTask } from '../../store/reducers/task-list.reducer';
+import { createTask, updateTask } from '../../store/reducers/task.slice';
 import { useAppDispatch, useAppSelector } from '../../store/store-hooks';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'TaskDetails'>;
@@ -51,7 +51,7 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
     setUpdatedTask({ ...updatedTask, isChecked: !updatedTask.isChecked });
   };
 
-  const handleCreateOrUpdateTask = () => {
+  const createNewTask = () => {
     if (updatedTask.title === '') {
       setError(true);
       return;
@@ -60,6 +60,10 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
     dispatch(createTask(updatedTask));
     navigation.navigate('List');
   };
+
+  useEffect(() => {
+    dispatch(updateTask(updatedTask));
+  }, [updatedTask]);
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -100,7 +104,7 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
                     backgroundColor: ThemeColors.green,
                   },
                 ]}
-                onPress={handleCreateOrUpdateTask}
+                onPress={createNewTask}
               >
                 <CustomText style={styles.buttonText}>
                   Create new task
@@ -127,7 +131,7 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
                   </CustomText>
                 </Pressable>
 
-                <Pressable
+                {/* <Pressable
                   style={[
                     styles.button,
                     styles.doneButton,
@@ -138,7 +142,7 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
                   onPress={handleCreateOrUpdateTask}
                 >
                   <CustomText style={styles.buttonText}>Update task</CustomText>
-                </Pressable>
+                </Pressable> */}
               </View>
             )}
           </View>
