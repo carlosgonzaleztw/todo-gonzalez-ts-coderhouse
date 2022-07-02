@@ -8,7 +8,7 @@ import { TaskType } from '../types/task.type';
 
 export type MainStackParamList = {
   List: { updatedTask?: TaskType };
-  TaskDetails: { task: TaskType; viewOnly: boolean };
+  TaskDetails: { viewOnly: boolean };
 };
 
 const isIOS = Platform.OS === 'ios';

@@ -11,16 +11,27 @@ import CustomTextInput from '../../components/common/CustomTextInput/CustomTextI
 import ThemeColors from '../../styles/colors';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainNavigator';
+import { useSelector } from 'react-redux';
+import { TaskType } from '../../types/task.type';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'TaskDetails'>;
 
-const TaskDetailsScreen = ({ navigation, route }: Props) => {
-  const { task, viewOnly } = route.params;
+const EMPTY_TASK: TaskType = {
+  id: Math.random(),
+  title: '',
+  description: '',
+  isChecked: false,
+};
 
-  const [updatedTask, setUpdatedTask] = useState(task);
+const TaskDetailsScreen = ({ navigation, route }: Props) => {
+  const task = useSelector((state) => state.tasks.selectedTask);
+
+  const { viewOnly } = route.params;
+
+  const [updatedTask, setUpdatedTask] = useState(task || EMPTY_TASK);
   const [error, setError] = useState(false);
 
-  const newTask = task.title === '' ? true : false;
+  const newTask = task === null;
 
   const handleTitleChange = (title: string) => {
     if (title !== '') {

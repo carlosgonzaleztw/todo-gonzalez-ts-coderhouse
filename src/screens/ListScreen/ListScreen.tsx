@@ -8,11 +8,9 @@ import { TaskType } from '../../types/task.type';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainNavigator';
 import { useDispatch, useSelector } from 'react-redux';
-// import { generateTasks } from '../../data/fixture';
+import { createTask, selectTask } from '../../store/actions/task.action';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'List'>;
-
-// const demoTasks = generateTasks(Math.floor(Math.random() * 20) + 1);
 
 const ListScreen = ({ navigation, route }: Props) => {
   const dispatch = useDispatch();
@@ -66,20 +64,16 @@ const ListScreen = ({ navigation, route }: Props) => {
   };
 
   const handleOnAddTask = () => {
-    const emptyTask: TaskType = {
-      id: Math.random(),
-      title: '',
-      description: '',
-      isChecked: false,
-    };
+    dispatch(createTask());
     navigation.navigate('TaskDetails', {
-      task: emptyTask,
+      viewOnly: false,
     });
   };
 
   const handleViewDetails = (task: TaskType) => {
+    dispatch(selectTask(task.id));
     navigation.navigate('TaskDetails', {
-      task: task,
+      viewOnly: false,
     });
   };
 
