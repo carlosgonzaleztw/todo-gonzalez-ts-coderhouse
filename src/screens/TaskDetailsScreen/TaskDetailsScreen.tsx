@@ -13,25 +13,28 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainNavigator';
 import { useSelector } from 'react-redux';
 import { TaskType } from '../../types/task.type';
+import { RootState } from '../../store/store';
+import { createTask } from '../../store/reducers/task-list.reducer';
+import { useAppDispatch, useAppSelector } from '../../store/store-hooks';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'TaskDetails'>;
 
 const EMPTY_TASK: TaskType = {
-  id: Math.random(),
   title: '',
   description: '',
   isChecked: false,
 };
 
 const TaskDetailsScreen = ({ navigation, route }: Props) => {
-  const task = useSelector((state) => state.tasks.selected);
+  const dispatch = useAppDispatch();
+  const task = useAppSelector((state: RootState) => state.tasks.selected);
 
   const { viewOnly } = route.params;
 
   const [updatedTask, setUpdatedTask] = useState(task || EMPTY_TASK);
   const [error, setError] = useState(false);
 
-  const newTask = task === null;
+  const newTask = task === undefined;
 
   const handleTitleChange = (title: string) => {
     if (title !== '') {
@@ -54,7 +57,8 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
       return;
     }
 
-    navigation.navigate('List', { updatedTask: updatedTask });
+    dispatch(createTask(updatedTask));
+    navigation.navigate('List');
   };
 
   return (

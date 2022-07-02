@@ -7,8 +7,8 @@ import ThemeColors from '../styles/colors';
 import { TaskType } from '../types/task.type';
 
 export type MainStackParamList = {
-  List: { updatedTask?: TaskType };
-  TaskDetails: { viewOnly: boolean };
+  List: any;
+  TaskDetails: { viewOnly?: boolean };
 };
 
 const isIOS = Platform.OS === 'ios';

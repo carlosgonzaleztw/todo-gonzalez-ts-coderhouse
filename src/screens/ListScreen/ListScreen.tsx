@@ -7,18 +7,17 @@ import ThemeColors from '../../styles/colors';
 import { TaskType } from '../../types/task.type';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainNavigator';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../store/store-hooks';
 import {
-  createTask,
   selectTask,
-  updateTask,
-} from '../../store/actions/task.action';
+  unselectTasks,
+} from '../../store/reducers/task-list.reducer';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'List'>;
 
 const ListScreen = ({ navigation, route }: Props) => {
-  const dispatch = useDispatch();
-  const TASK_LIST = useSelector((state) => state.tasks.list);
+  const dispatch = useAppDispatch();
+  const TASK_LIST = useAppSelector((state) => state.tasks.list);
 
   const [tasks, setTasks] = useState<TaskType[]>(TASK_LIST);
 
@@ -51,9 +50,8 @@ const ListScreen = ({ navigation, route }: Props) => {
   }, [route.params?.updatedTask]);
 
   const handleTaskCheckChange = (task: TaskType) => {
-    console.log('TRYING TO CHANGE STATUS IN LIST SCREEN');
     const updatedTask = { ...task, isChecked: !task.isChecked };
-    dispatch(updateTask(updatedTask));
+    // dispatch(updateTask(updatedTask));
   };
 
   const handleTaskDelete = (id: number) => {
@@ -64,14 +62,14 @@ const ListScreen = ({ navigation, route }: Props) => {
   };
 
   const handleOnAddTask = () => {
-    dispatch(createTask());
+    dispatch(unselectTasks());
     navigation.navigate('TaskDetails', {
       viewOnly: false,
     });
   };
 
-  const handleViewDetails = (task: TaskType) => {
-    dispatch(selectTask(task.id));
+  const handleViewDetails = (taskId: number) => {
+    dispatch(selectTask(taskId));
     navigation.navigate('TaskDetails', {
       viewOnly: false,
     });
@@ -88,8 +86,8 @@ const ListScreen = ({ navigation, route }: Props) => {
       <TasksList
         tasks={tasks}
         onTaskCheckChange={(task) => handleTaskCheckChange(task)}
-        onTaskDelete={(task) => handleTaskDelete(task.id)}
-        onViewDetails={(task) => handleViewDetails(task)}
+        onTaskDelete={(task) => handleTaskDelete(task.id!)}
+        onViewDetails={(task) => handleViewDetails(task.id!)}
       ></TasksList>
     </View>
   );

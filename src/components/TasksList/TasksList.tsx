@@ -35,7 +35,7 @@ const TasksList = ({
       data={tasks}
       renderItem={renderItem}
       style={styles.root}
-      keyExtractor={(item) => item.id.toString()}
+      keyExtractor={(item) => item.id!.toString()}
     />
   );
 };
