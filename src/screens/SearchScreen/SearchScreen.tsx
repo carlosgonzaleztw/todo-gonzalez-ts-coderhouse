@@ -1,25 +1,28 @@
-import { StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import CustomTextInput from '../../components/common/CustomTextInput/CustomTextInput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ThemeColors from '../../styles/colors';
 import TasksList from '../../components/TasksList/TasksList';
-import { generateTasks } from '../../data/fixture';
 import { TaskType } from '../../types/task.type';
 import { SearchStackParamList } from '../../navigation/SearchNavigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectTask } from '../../store/actions/task.action';
 
-const demoTasks = generateTasks(Math.floor(Math.random() * 20) + 1);
 type Props = NativeStackScreenProps<SearchStackParamList, 'Search'>;
 
 const SearchScreen = ({ navigation, route }: Props) => {
-  const [tasks, setTasks] = useState<TaskType[]>(demoTasks);
+  const dispatch = useDispatch();
+  const TASK_LIST = useSelector((state) => state.tasks.taskList);
+
+  const [tasks, setTasks] = useState<TaskType[]>(TASK_LIST);
 
   const handleSearchTasks = (text: string) => {
     if (text === '') {
-      setTasks(demoTasks);
+      setTasks(TASK_LIST);
     } else {
-      const filteredTask = demoTasks.filter((task) => {
+      const filteredTask = TASK_LIST.filter((task: TaskType) => {
         return task.title.toLowerCase().search(text.toLowerCase()) !== -1;
       });
 
@@ -28,8 +31,9 @@ const SearchScreen = ({ navigation, route }: Props) => {
   };
 
   const handleViewDetails = (task: TaskType) => {
+    dispatch(selectTask(task.id));
     navigation.navigate('TaskDetails', {
-      task: task,
+      viewOnly: true,
     });
   };
 

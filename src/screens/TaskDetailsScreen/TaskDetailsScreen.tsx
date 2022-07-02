@@ -24,7 +24,7 @@ const EMPTY_TASK: TaskType = {
 };
 
 const TaskDetailsScreen = ({ navigation, route }: Props) => {
-  const task = useSelector((state) => state.tasks.selectedTask);
+  const task = useSelector((state) => state.tasks.selected);
 
   const { viewOnly } = route.params;
 
