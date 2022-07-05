@@ -4,6 +4,10 @@ import {
   Pressable,
   ScrollView,
   ViewStyle,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import CustomText from '../../components/common/CustomText/CustomText';
@@ -66,103 +70,103 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
   }, [updatedTask]);
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={styles.container}>
-        <View style={styles.inputsWrapper}>
-          {error && (
-            <CustomText style={styles.errorLabel}>Title is required</CustomText>
-          )}
-          <CustomTextInput
-            value={updatedTask.title}
-            multiline
-            style={
-              [styles.titleInput, error ? styles.inputError : ''] as ViewStyle
-            }
-            onChangeText={handleTitleChange}
-            placeholder="Title"
-            editable={!updatedTask.isChecked && !viewOnly}
-            selectTextOnFocus={!updatedTask.isChecked}
-          />
-          <CustomTextInput
-            value={updatedTask.description}
-            multiline
-            style={styles.descriptionInput}
-            onChangeText={handleDescriptionChange}
-            placeholder="Description"
-            editable={!updatedTask.isChecked && !viewOnly}
-            selectTextOnFocus={!updatedTask.isChecked}
-          />
-        </View>
-        {!viewOnly && (
-          <View style={styles.buttonsWrapper}>
-            {newTask ? (
-              <Pressable
-                style={[
-                  styles.button,
-                  styles.doneButton,
-                  {
-                    backgroundColor: ThemeColors.green,
-                  },
-                ]}
-                onPress={createNewTask}
-              >
-                <CustomText style={styles.buttonText}>
-                  Create new task
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.avoidingContainer}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.inputsWrapper}>
+              {error && (
+                <CustomText style={styles.errorLabel}>
+                  Title is required
                 </CustomText>
-              </Pressable>
-            ) : (
-              <View>
-                <Pressable
-                  style={[
-                    styles.button,
-                    styles.doneButton,
-                    {
-                      backgroundColor: updatedTask.isChecked
-                        ? ThemeColors.orange
-                        : ThemeColors.green,
-                    },
-                  ]}
-                  onPress={handleCheckDone}
-                >
-                  <CustomText style={styles.buttonText}>
-                    {updatedTask.isChecked
-                      ? 'Mark as in progress'
-                      : 'Mark as done'}
-                  </CustomText>
-                </Pressable>
-
-                {/* <Pressable
-                  style={[
-                    styles.button,
-                    styles.doneButton,
-                    {
-                      backgroundColor: ThemeColors.green,
-                    },
-                  ]}
-                  onPress={handleCreateOrUpdateTask}
-                >
-                  <CustomText style={styles.buttonText}>Update task</CustomText>
-                </Pressable> */}
+              )}
+              <CustomTextInput
+                value={updatedTask.title}
+                multiline
+                style={
+                  [
+                    styles.titleInput,
+                    error ? styles.inputError : '',
+                  ] as ViewStyle
+                }
+                onChangeText={handleTitleChange}
+                placeholder="Title"
+                editable={!updatedTask.isChecked && !viewOnly}
+                selectTextOnFocus={!updatedTask.isChecked}
+              />
+              <CustomTextInput
+                value={updatedTask.description}
+                multiline
+                style={styles.descriptionInput}
+                onChangeText={handleDescriptionChange}
+                placeholder="Description"
+                editable={!updatedTask.isChecked && !viewOnly}
+                selectTextOnFocus={!updatedTask.isChecked}
+                numberOfLines={8}
+              />
+            </View>
+            {!viewOnly && (
+              <View style={styles.buttonsWrapper}>
+                {newTask ? (
+                  <Pressable
+                    style={[
+                      styles.button,
+                      styles.doneButton,
+                      {
+                        backgroundColor: ThemeColors.green,
+                      },
+                    ]}
+                    onPress={createNewTask}
+                  >
+                    <CustomText style={styles.buttonText}>
+                      Create new task
+                    </CustomText>
+                  </Pressable>
+                ) : (
+                  <View>
+                    <Pressable
+                      style={[
+                        styles.button,
+                        styles.doneButton,
+                        {
+                          backgroundColor: updatedTask.isChecked
+                            ? ThemeColors.orange
+                            : ThemeColors.green,
+                        },
+                      ]}
+                      onPress={handleCheckDone}
+                    >
+                      <CustomText style={styles.buttonText}>
+                        {updatedTask.isChecked
+                          ? 'Mark as in progress'
+                          : 'Mark as done'}
+                      </CustomText>
+                    </Pressable>
+                  </View>
+                )}
               </View>
             )}
           </View>
-        )}
-      </View>
-    </ScrollView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 export default TaskDetailsScreen;
 
 const styles = StyleSheet.create({
+  avoidingContainer: { flex: 1, backgroundColor: 'white' },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     paddingHorizontal: 10,
     paddingVertical: 20,
-    width: '100%',
   },
   inputsWrapper: {
     width: '100%',
