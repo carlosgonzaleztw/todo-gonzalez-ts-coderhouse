@@ -11,5 +11,4 @@ const ThemeColors = {
   textColor: '#000000',
   white: '#FFF',
 };
-
 export default ThemeColors;

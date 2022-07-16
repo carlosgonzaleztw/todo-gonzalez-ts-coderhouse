@@ -4,6 +4,7 @@ import {
   Pressable,
   ScrollView,
   ViewStyle,
+  Text,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import CustomText from '../../components/common/CustomText/CustomText';
@@ -11,11 +12,11 @@ import CustomTextInput from '../../components/common/CustomTextInput/CustomTextI
 import ThemeColors from '../../styles/colors';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainNavigator';
-import { useSelector } from 'react-redux';
 import { TaskType } from '../../types/task.type';
 import { RootState } from '../../store/store';
 import { createTask, updateTask } from '../../store/reducers/task.slice';
 import { useAppDispatch, useAppSelector } from '../../store/store-hooks';
+import PictureButton from '../../components/PictureButton/PictureButton';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'TaskDetails'>;
 
@@ -93,25 +94,32 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
             selectTextOnFocus={!updatedTask.isChecked}
           />
         </View>
+        <View>
+          <Text>Image Container</Text>
+        </View>
         {!viewOnly && (
           <View style={styles.buttonsWrapper}>
             {newTask ? (
-              <Pressable
-                style={[
-                  styles.button,
-                  styles.doneButton,
-                  {
-                    backgroundColor: ThemeColors.green,
-                  },
-                ]}
-                onPress={createNewTask}
-              >
-                <CustomText style={styles.buttonText}>
-                  Create new task
-                </CustomText>
-              </Pressable>
+              <>
+                <PictureButton />
+                <Pressable
+                  style={[
+                    styles.button,
+                    styles.doneButton,
+                    {
+                      backgroundColor: ThemeColors.green,
+                    },
+                  ]}
+                  onPress={createNewTask}
+                >
+                  <CustomText style={styles.buttonText}>
+                    Create new task
+                  </CustomText>
+                </Pressable>
+              </>
             ) : (
               <View>
+                <PictureButton />
                 <Pressable
                   style={[
                     styles.button,
@@ -130,19 +138,6 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
                       : 'Mark as done'}
                   </CustomText>
                 </Pressable>
-
-                {/* <Pressable
-                  style={[
-                    styles.button,
-                    styles.doneButton,
-                    {
-                      backgroundColor: ThemeColors.green,
-                    },
-                  ]}
-                  onPress={handleCreateOrUpdateTask}
-                >
-                  <CustomText style={styles.buttonText}>Update task</CustomText>
-                </Pressable> */}
               </View>
             )}
           </View>
@@ -202,13 +197,15 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 100,
     alignItems: 'center',
-    paddingVertical: 12,
-    width: '100%',
+    justifyContent: 'center',
+    height: 50,
+  },
+  imageButton: {
+    backgroundColor: ThemeColors.pink,
+    width: 50,
+    marginBottom: 5,
   },
   doneButton: { marginBottom: 5 },
-  backButton: {
-    backgroundColor: ThemeColors.pink,
-  },
   buttonText: {
     color: 'white',
   },
