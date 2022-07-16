@@ -23,11 +23,11 @@ export const taskSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    selectTask: (state, { payload }: PayloadAction<number>) => {
+    selectTask: (state: TaskState, { payload }: PayloadAction<number>) => {
       const selectedTask = state.list.find((task) => task.id === payload);
       state.selected = selectedTask;
     },
-    createTask: (state, { payload }: PayloadAction<TaskType>) => {
+    createTask: (state: TaskState, { payload }: PayloadAction<TaskType>) => {
       const newTask: TaskType = {
         id: Math.random(),
         title: payload.title,
@@ -36,10 +36,10 @@ export const taskSlice = createSlice({
       };
       state.list.push(newTask);
     },
-    unselectTasks: (state) => {
+    unselectTasks: (state: TaskState) => {
       state.selected = undefined;
     },
-    updateTask: (state, { payload }: PayloadAction<TaskType>) => {
+    updateTask: (state: TaskState, { payload }: PayloadAction<TaskType>) => {
       const updatedList = state.list.map((task) => {
         if (task.id === payload.id) {
           return payload;
@@ -48,7 +48,7 @@ export const taskSlice = createSlice({
       });
       state.list = updatedList;
     },
-    deleteTask: (state, { payload }: PayloadAction<number>) => {
+    deleteTask: (state: TaskState, { payload }: PayloadAction<number>) => {
       const updatedList = state.list.filter((task) => task.id !== payload);
       state.list = updatedList;
     },
