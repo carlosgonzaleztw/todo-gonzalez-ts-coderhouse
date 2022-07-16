@@ -89,11 +89,11 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
           <View style={styles.metadataContainer}>
             {task.createdAt && (
               <Text style={styles.metadata}>
-                {`Created on: ${task.createdAt}`}
+                {`📅 Created on: ${task.createdAt}`}
               </Text>
             )}
             {task.location && (
-              <Text style={styles.metadata}>{task.location}</Text>
+              <Text style={styles.metadata}>{`📍 ${task.location}`}</Text>
             )}
           </View>
           {error && (
@@ -122,7 +122,11 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
           {task?.image && (
             <Image
               source={{ uri: task.image }}
-              style={{ height: 300, width: '100%' }}
+              style={{
+                height: 300,
+                width: '100%',
+                opacity: task.isChecked ? 0.5 : 1,
+              }}
             />
           )}
         </View>
