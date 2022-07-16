@@ -7,7 +7,7 @@ import {
   Text,
   Image,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import CustomText from '../../components/common/CustomText/CustomText';
 import CustomTextInput from '../../components/common/CustomTextInput/CustomTextInput';
 import ThemeColors from '../../styles/colors';
@@ -105,49 +105,54 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
             />
           )}
         </View>
-        {!viewOnly && (
-          <View style={styles.buttonsWrapper}>
-            {newTask ? (
-              <>
-                <ImageButton onImage={handleImageChange} />
-                <Pressable
-                  style={[
-                    styles.button,
-                    styles.doneButton,
-                    {
-                      backgroundColor: ThemeColors.green,
-                    },
-                  ]}
-                  onPress={createNewTask}
-                >
-                  <CustomText style={styles.buttonText}>
-                    Create new task
-                  </CustomText>
-                </Pressable>
-              </>
-            ) : (
-              <View>
-                <ImageButton onImage={handleImageChange} />
-                <Pressable
-                  style={[
-                    styles.button,
-                    styles.doneButton,
-                    {
-                      backgroundColor: task.isChecked
-                        ? ThemeColors.orange
-                        : ThemeColors.green,
-                    },
-                  ]}
-                  onPress={handleCheckDone}
-                >
-                  <CustomText style={styles.buttonText}>
-                    {task.isChecked ? 'Mark as in progress' : 'Mark as done'}
-                  </CustomText>
-                </Pressable>
-              </View>
-            )}
-          </View>
-        )}
+        <View style={styles.buttonsWrapper}>
+          {!viewOnly && (
+            <Fragment>
+              {newTask ? (
+                <Fragment>
+                  <Pressable
+                    style={[
+                      styles.button,
+                      styles.doneButton,
+                      {
+                        backgroundColor: ThemeColors.green,
+                      },
+                    ]}
+                    onPress={createNewTask}
+                  >
+                    <CustomText style={styles.buttonText}>
+                      Create new task
+                    </CustomText>
+                  </Pressable>
+                  <ImageButton onImage={handleImageChange} />
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <Pressable
+                    style={[
+                      styles.button,
+                      styles.doneButton,
+                      {
+                        backgroundColor: task.isChecked
+                          ? ThemeColors.orange
+                          : ThemeColors.green,
+                      },
+                    ]}
+                    onPress={handleCheckDone}
+                  >
+                    <CustomText style={styles.buttonText}>
+                      {task.isChecked ? 'Mark as in progress' : 'Mark as done'}
+                    </CustomText>
+                  </Pressable>
+                  <ImageButton
+                    onImage={handleImageChange}
+                    disabled={task.isChecked}
+                  />
+                </Fragment>
+              )}
+            </Fragment>
+          )}
+        </View>
       </View>
     </ScrollView>
   );
@@ -199,6 +204,7 @@ const styles = StyleSheet.create({
   buttonsWrapper: {
     width: '100%',
     bottom: 0,
+    flexDirection: 'row',
   },
   button: {
     borderRadius: 100,
@@ -206,12 +212,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 50,
   },
-  imageButton: {
-    backgroundColor: ThemeColors.pink,
-    width: 50,
+  doneButton: {
     marginBottom: 5,
+    flexGrow: 1,
+    marginEnd: 5,
   },
-  doneButton: { marginBottom: 5 },
   buttonText: {
     color: 'white',
   },

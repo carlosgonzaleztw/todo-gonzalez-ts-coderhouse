@@ -4,9 +4,9 @@ import ThemeColors from '../../styles/colors';
 import IonicIcons from '@expo/vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 
-type Props = { onImage: (url: string) => void };
+type Props = { onImage: (url: string) => void; disabled?: boolean };
 
-const ImageButton = ({ onImage }: Props) => {
+const ImageButton = ({ onImage, disabled = false }: Props) => {
   const verifyPermission = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
@@ -37,7 +37,11 @@ const ImageButton = ({ onImage }: Props) => {
   };
 
   return (
-    <Pressable style={styles.root} onPress={handleTakeImage}>
+    <Pressable
+      style={[styles.root, disabled ? styles.disabled : null]}
+      onPress={handleTakeImage}
+      disabled={disabled}
+    >
       <IonicIcons name="image-outline" size={25} color={ThemeColors.white} />
     </Pressable>
   );
@@ -53,5 +57,8 @@ const styles = StyleSheet.create({
     width: 50,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  disabled: {
+    backgroundColor: ThemeColors.disabledText,
   },
 });
