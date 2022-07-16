@@ -1,6 +1,7 @@
 import * as Location from 'expo-location';
 
-const API_KEY = 'AIzaSyD2QFUNJ8l0_nxw0l42okXdvLC_OjZ4kxU';
+// const API_KEY = 'AIzaSyD2QFUNJ8l0_nxw0l42okXdvLC_OjZ4kxU';
+const API_KEY = 'xxxAIzaSyD2QFUNJ8l0_nxw0l42okXdvLC_OjZ4kxU';
 const GEOCODING_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
 
 export const getCurrentAddress = async (): Promise<string> => {
@@ -16,7 +17,7 @@ export const getCurrentAddress = async (): Promise<string> => {
   }
 
   const data = await response.json();
-  return data.results[0].formatted_address;
+  return data.results[0]?.formatted_address;
 };
 
 const buildGeocodingUrl = (lat: number, lng: number): string => {
