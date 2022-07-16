@@ -21,6 +21,7 @@ export const generateTasks = (amount: number): TaskType[] => {
       title: lorem.generateWords(Math.floor(Math.random() * 10) + 1),
       description: lorem.generateSentences(Math.floor(Math.random() * 4) + 1),
       isChecked: Math.random() < 0.5,
+      createdAt: new Date().toDateString(),
     });
   }
 

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { generateTasks } from '../../data/fixture';
 import { TaskType } from '../../types/task.type';
+import { getCurrentAddress } from '../../utils/maps.utils';
 
 const INITIAL_TASKS = generateTasks(12);
 
@@ -33,8 +34,10 @@ export const taskSlice = createSlice({
         title: payload.title,
         description: payload.description,
         isChecked: false,
+        location: payload.location || undefined,
+        createdAt: new Date().toDateString(),
       };
-      state.list.push(newTask);
+      state.list.unshift(newTask);
     },
     unselectTasks: (state: TaskState) => {
       state.selected = undefined;

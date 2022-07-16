@@ -17,7 +17,8 @@ import { TaskType } from '../../types/task.type';
 import { RootState } from '../../store/store';
 import { createTask, updateTask } from '../../store/reducers/task.slice';
 import { useAppDispatch, useAppSelector } from '../../store/store-hooks';
-import ImageButton from '../../components/PictureButton/PictureButton';
+import ImageButton from '../../components/ImageButton/ImageButton';
+import { getCurrentAddress } from '../../utils/maps.utils';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'TaskDetails'>;
 
@@ -25,6 +26,7 @@ const EMPTY_TASK: TaskType = {
   title: '',
   description: '',
   isChecked: false,
+  createdAt: undefined,
 };
 
 const TaskDetailsScreen = ({ navigation, route }: Props) => {
@@ -39,6 +41,15 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
   const [error, setError] = useState(false);
 
   const newTask = selectedTask === undefined;
+
+  const setAddress = async () => {
+    const address = await getCurrentAddress();
+    setUpdatedTask({ ...task, location: address });
+  };
+
+  useEffect(() => {
+    if (newTask) setAddress();
+  }, []);
 
   const handleTitleChange = (title: string) => {
     if (title !== '') setError(false);
@@ -57,7 +68,7 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
     setUpdatedTask({ ...task, image: url });
   };
 
-  const createNewTask = () => {
+  const createNewTask = async () => {
     if (task.title === '') {
       setError(true);
       return;
@@ -75,6 +86,16 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
         <View style={styles.inputsWrapper}>
+          <View style={styles.metadataContainer}>
+            {task.createdAt && (
+              <Text style={styles.metadata}>
+                {`Created on: ${task.createdAt}`}
+              </Text>
+            )}
+            {task.location && (
+              <Text style={styles.metadata}>{task.location}</Text>
+            )}
+          </View>
           {error && (
             <CustomText style={styles.errorLabel}>Title is required</CustomText>
           )}
@@ -101,7 +122,7 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
           {task?.image && (
             <Image
               source={{ uri: task.image }}
-              style={{ height: 200, width: '100%' }}
+              style={{ height: 300, width: '100%' }}
             />
           )}
         </View>
@@ -124,7 +145,10 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
                       Create new task
                     </CustomText>
                   </Pressable>
-                  <ImageButton onImage={handleImageChange} />
+                  <ImageButton
+                    onImage={handleImageChange}
+                    disabled={task.isChecked}
+                  />
                 </Fragment>
               ) : (
                 <Fragment>
@@ -173,6 +197,14 @@ const styles = StyleSheet.create({
   inputsWrapper: {
     width: '100%',
   },
+  metadataContainer: {
+    width: '70%',
+    marginBottom: 10,
+  },
+  metadata: {
+    color: ThemeColors.disabledText,
+    fontSize: 12,
+  },
   inputError: {
     borderColor: 'red',
     borderWidth: 2,
@@ -216,6 +248,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     flexGrow: 1,
     marginEnd: 5,
+  },
+  locationButton: {
+    marginRight: 2,
   },
   buttonText: {
     color: 'white',
