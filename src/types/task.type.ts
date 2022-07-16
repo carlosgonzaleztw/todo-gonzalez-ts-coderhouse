@@ -4,5 +4,5 @@ export type TaskType = {
   description: string;
   isChecked: boolean;
   location?: string;
-  picture?: string;
+  image?: string;
 };

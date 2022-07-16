@@ -5,6 +5,7 @@ import {
   ScrollView,
   ViewStyle,
   Text,
+  Image,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import CustomText from '../../components/common/CustomText/CustomText';
@@ -16,7 +17,7 @@ import { TaskType } from '../../types/task.type';
 import { RootState } from '../../store/store';
 import { createTask, updateTask } from '../../store/reducers/task.slice';
 import { useAppDispatch, useAppSelector } from '../../store/store-hooks';
-import PictureButton from '../../components/PictureButton/PictureButton';
+import ImageButton from '../../components/PictureButton/PictureButton';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'TaskDetails'>;
 
@@ -28,43 +29,47 @@ const EMPTY_TASK: TaskType = {
 
 const TaskDetailsScreen = ({ navigation, route }: Props) => {
   const dispatch = useAppDispatch();
-  const task = useAppSelector((state: RootState) => state.tasks.selected);
+  const selectedTask = useAppSelector(
+    (state: RootState) => state.tasks.selected
+  );
 
   const { viewOnly } = route.params;
 
-  const [updatedTask, setUpdatedTask] = useState(task || EMPTY_TASK);
+  const [task, setUpdatedTask] = useState(selectedTask || EMPTY_TASK);
   const [error, setError] = useState(false);
 
-  const newTask = task === undefined;
+  const newTask = selectedTask === undefined;
 
   const handleTitleChange = (title: string) => {
-    if (title !== '') {
-      setError(false);
-    }
+    if (title !== '') setError(false);
 
-    setUpdatedTask({ ...updatedTask, title: title });
+    setUpdatedTask({ ...task, title: title });
   };
   const handleDescriptionChange = (description: string) => {
-    setUpdatedTask({ ...updatedTask, description: description });
+    setUpdatedTask({ ...task, description: description });
   };
 
   const handleCheckDone = () => {
-    setUpdatedTask({ ...updatedTask, isChecked: !updatedTask.isChecked });
+    setUpdatedTask({ ...task, isChecked: !task.isChecked });
+  };
+
+  const handleImageChange = (url: string) => {
+    setUpdatedTask({ ...task, image: url });
   };
 
   const createNewTask = () => {
-    if (updatedTask.title === '') {
+    if (task.title === '') {
       setError(true);
       return;
     }
 
-    dispatch(createTask(updatedTask));
+    dispatch(createTask(task));
     navigation.navigate('List');
   };
 
   useEffect(() => {
-    dispatch(updateTask(updatedTask));
-  }, [updatedTask]);
+    dispatch(updateTask(task));
+  }, [task]);
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -74,34 +79,37 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
             <CustomText style={styles.errorLabel}>Title is required</CustomText>
           )}
           <CustomTextInput
-            value={updatedTask.title}
+            value={task.title}
             multiline
             style={
               [styles.titleInput, error ? styles.inputError : ''] as ViewStyle
             }
             onChangeText={handleTitleChange}
             placeholder="Title"
-            editable={!updatedTask.isChecked && !viewOnly}
-            selectTextOnFocus={!updatedTask.isChecked}
+            editable={!task.isChecked && !viewOnly}
+            selectTextOnFocus={!task.isChecked}
           />
           <CustomTextInput
-            value={updatedTask.description}
+            value={task.description}
             multiline
             style={styles.descriptionInput}
             onChangeText={handleDescriptionChange}
             placeholder="Description"
-            editable={!updatedTask.isChecked && !viewOnly}
-            selectTextOnFocus={!updatedTask.isChecked}
+            editable={!task.isChecked && !viewOnly}
+            selectTextOnFocus={!task.isChecked}
           />
-        </View>
-        <View>
-          <Text>Image Container</Text>
+          {task?.image && (
+            <Image
+              source={{ uri: task.image }}
+              style={{ height: 200, width: '100%' }}
+            />
+          )}
         </View>
         {!viewOnly && (
           <View style={styles.buttonsWrapper}>
             {newTask ? (
               <>
-                <PictureButton />
+                <ImageButton onImage={handleImageChange} />
                 <Pressable
                   style={[
                     styles.button,
@@ -119,13 +127,13 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
               </>
             ) : (
               <View>
-                <PictureButton />
+                <ImageButton onImage={handleImageChange} />
                 <Pressable
                   style={[
                     styles.button,
                     styles.doneButton,
                     {
-                      backgroundColor: updatedTask.isChecked
+                      backgroundColor: task.isChecked
                         ? ThemeColors.orange
                         : ThemeColors.green,
                     },
@@ -133,9 +141,7 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
                   onPress={handleCheckDone}
                 >
                   <CustomText style={styles.buttonText}>
-                    {updatedTask.isChecked
-                      ? 'Mark as in progress'
-                      : 'Mark as done'}
+                    {task.isChecked ? 'Mark as in progress' : 'Mark as done'}
                   </CustomText>
                 </Pressable>
               </View>
