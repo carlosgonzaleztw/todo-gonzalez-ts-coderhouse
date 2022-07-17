@@ -6,6 +6,14 @@ import Root from './src/Root';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { store } from './src/store/store';
+import { init } from './src/db';
+
+try {
+  init();
+  console.log('DB initialized');
+} catch (error) {
+  console.log('DB init failed: ', error);
+}
 
 export default function App() {
   const [loaded] = useFonts({
