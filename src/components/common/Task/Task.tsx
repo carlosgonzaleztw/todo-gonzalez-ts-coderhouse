@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, View, Pressable } from 'react-native';
 import React from 'react';
 import CheckBox from 'expo-checkbox';
 import CustomText from '../CustomText/CustomText';
 import ThemeColors from '../../../styles/colors';
 import { TaskType } from '../../../types/task.type';
+import IonicIcons from '@expo/vector-icons/Ionicons';
 
 type Props = {
   task: TaskType;
@@ -47,9 +48,6 @@ const Task = ({
         >
           {task.title}
         </CustomText>
-        <CustomText style={styles.description}>
-          Press to see the details
-        </CustomText>
       </Pressable>
       {!viewOnly && (
         <Pressable
@@ -61,7 +59,11 @@ const Task = ({
           ]}
           onPress={() => onDelete(task)}
         >
-          <CustomText style={styles.buttonText}>X</CustomText>
+          <IonicIcons
+            name={'close-outline'}
+            size={20}
+            color={ThemeColors.white}
+          />
         </Pressable>
       )}
     </View>
