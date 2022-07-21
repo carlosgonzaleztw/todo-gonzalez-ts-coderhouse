@@ -19,6 +19,7 @@ import { createTask, updateTask } from '../../store/reducers/task.slice';
 import { useAppDispatch, useAppSelector } from '../../store/store-hooks';
 import ImageButton from '../../components/ImageButton/ImageButton';
 import { getCurrentAddress } from '../../utils/maps.utils';
+import { persistTask } from '../../db/db.index';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'TaskDetails'>;
 
@@ -74,7 +75,27 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
       return;
     }
 
-    dispatch(createTask(task));
+    try {
+      const currentDate = new Date().toDateString();
+      const dbResponse = await persistTask({
+        ...task,
+        createdAt: currentDate,
+      });
+
+      dispatch(
+        createTask({
+          ...task,
+          // @ts-ignore
+          id: parseInt(dbResponse.insertId),
+          createdAt: currentDate,
+        })
+      );
+
+      console.log(typeof dbResponse);
+    } catch (error) {
+      console.log(error);
+    }
+
     navigation.navigate('List');
   };
 
