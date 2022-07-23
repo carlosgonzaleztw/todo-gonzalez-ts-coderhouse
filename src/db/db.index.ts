@@ -41,12 +41,6 @@ export const persistTask = ({
   location,
   image,
 }: TaskType) => {
-  console.log('entering persistTask title: ', title);
-  console.log('entering persistTask desc: ', description);
-  console.log('entering persistTask isChecked: ', isChecked);
-  console.log('entering persistTask create at: ', createdAt);
-  console.log('entering persistTask location: ', location);
-  console.log('entering persistTask image path: ', image);
   const promise = new Promise<unknown>((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
@@ -64,6 +58,39 @@ export const persistTask = ({
       );
     });
   });
+
+  return promise;
+};
+
+export const updateDbTask = ({
+  title,
+  description,
+  isChecked,
+  createdAt,
+  location,
+  image,
+  id,
+}: TaskType) => {
+  const promise = new Promise<unknown>((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'UPDATE task set (title, description, isChecked, createdAt, location , image) VALUES (?,?,?,?,?,?) where id = ?',
+        [
+          id as number,
+          title,
+          description,
+          isChecked ? '1' : '0',
+          createdAt as string,
+          location ? (location as string) : '',
+          image ? (image as string) : '',
+        ],
+        (_, result) => resolve(result),
+        (_, err): boolean | any => reject(err)
+      );
+    });
+  });
+
+  console.log('updateDbTask', promise);
 
   return promise;
 };

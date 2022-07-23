@@ -52,18 +52,6 @@ export const taskSlice = createSlice({
   },
 });
 
-const loadTasks = () => {
-  return async (dispatch) => {
-    try {
-      const tasks = await getAllTasks();
-      dispatch(loadTasks(tasks));
-    } catch (error) {
-      console.log(error.message);
-      throw error;
-    }
-  };
-};
-
 export const { selectTask, unselectTasks, createTask, deleteTask, updateTask } =
   taskSlice.actions;
 
