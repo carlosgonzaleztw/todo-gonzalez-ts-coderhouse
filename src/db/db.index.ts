@@ -18,7 +18,7 @@ export const init = () => {
   return promise;
 };
 
-export const getAllTasks = () => {
+export const getAllDbTasks = () => {
   const promise = new Promise<unknown>((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
@@ -74,15 +74,15 @@ export const updateDbTask = ({
   const promise = new Promise<unknown>((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'UPDATE task set (title, description, isChecked, createdAt, location , image) VALUES (?,?,?,?,?,?) where id = ?',
+        'UPDATE task SET title=?, description=?, isChecked=?, createdAt=?, location=?, image=? WHERE id=?',
         [
-          id as number,
           title,
           description,
           isChecked ? '1' : '0',
           createdAt as string,
           location ? (location as string) : '',
           image ? (image as string) : '',
+          id as number,
         ],
         (_, result) => resolve(result),
         (_, err): boolean | any => reject(err)
@@ -90,7 +90,20 @@ export const updateDbTask = ({
     });
   });
 
-  console.log('updateDbTask', promise);
+  return promise;
+};
+
+export const deleteDbTask = (id: number) => {
+  const promise = new Promise<unknown>((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'DELETE from task WHERE id=?',
+        [id as number],
+        (_, result) => resolve(result),
+        (_, err): boolean | any => reject(err)
+      );
+    });
+  });
 
   return promise;
 };

@@ -14,10 +14,11 @@ import {
   unselectTasks,
   updateTask,
 } from '../../store/reducers/task.slice';
+import { deleteDbTask, updateDbTask } from '../../db/db.index';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'List'>;
 
-const ListScreen = ({ navigation, route }: Props) => {
+const ListScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   const TASK_LIST = useAppSelector((state) => state.tasks.list);
 
@@ -25,13 +26,25 @@ const ListScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => setTasks(TASK_LIST), [TASK_LIST]);
 
-  const handleTaskCheckChange = (task: TaskType) => {
+  const handleTaskCheckChange = async (task: TaskType) => {
     const updatedTask = { ...task, isChecked: !task.isChecked };
-    dispatch(updateTask(updatedTask));
+    try {
+      await updateDbTask(updatedTask);
+
+      // @ts-ignore
+      dispatch(updateTask(updatedTask));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleTaskDelete = (id: number) => {
-    dispatch(deleteTask(id));
+  const handleTaskDelete = async (id: number) => {
+    try {
+      await deleteDbTask(id);
+      dispatch(deleteTask(id));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleOnAddTask = () => {

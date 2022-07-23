@@ -99,10 +99,10 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
 
   const persistUpdatedTask = async () => {
     try {
-      const dbResponse = await updateDbTask(task);
+      await updateDbTask(task);
 
       // @ts-ignore
-      dispatch(updateTask({ ...task, id: parseInt(dbResponse.insertId) }));
+      dispatch(updateTask(task));
     } catch (error) {
       console.log(error);
     }

@@ -1,7 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Dispatch } from 'react';
-import { generateTasks } from '../../data/fixture';
-import { getAllTasks } from '../../db/db.index';
 import { TaskType } from '../../types/task.type';
 
 export type TaskActionType = {
