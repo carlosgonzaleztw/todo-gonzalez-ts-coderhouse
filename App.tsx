@@ -10,7 +10,6 @@ import { init } from './src/db/db.index';
 
 try {
   init();
-  console.log('DB initialized');
 } catch (error) {
   console.log('DB init failed: ', error);
 }
