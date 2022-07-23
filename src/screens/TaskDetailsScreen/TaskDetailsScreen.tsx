@@ -44,8 +44,10 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
   const newTask = selectedTask === undefined;
 
   const setAddress = async () => {
-    const address = await getCurrentAddress();
-    setUpdatedTask({ ...task, location: address });
+    if (!viewOnly) {
+      const address = await getCurrentAddress();
+      setUpdatedTask({ ...task, location: address });
+    }
   };
 
   useEffect(() => {
