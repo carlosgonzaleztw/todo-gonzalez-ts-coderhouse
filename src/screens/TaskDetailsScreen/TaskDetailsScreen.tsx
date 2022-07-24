@@ -19,7 +19,6 @@ import { createTask, updateTask } from '../../store/reducers/task.slice';
 import { useAppDispatch, useAppSelector } from '../../store/store-hooks';
 import ImageButton from '../../components/ImageButton/ImageButton';
 import { getCurrentAddress } from '../../utils/maps.utils';
-import { persistTask, updateDbTask } from '../../db/db.index';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'TaskDetails'>;
 
@@ -79,10 +78,10 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
 
     try {
       const currentDate = new Date().toDateString();
-      const dbResponse = await persistTask({
-        ...task,
-        createdAt: currentDate,
-      });
+      // const dbResponse = await persistTask({
+      //   ...task,
+      //   createdAt: currentDate,
+      // });
 
       dispatch(
         createTask({
@@ -101,7 +100,7 @@ const TaskDetailsScreen = ({ navigation, route }: Props) => {
 
   const persistUpdatedTask = async () => {
     try {
-      await updateDbTask(task);
+      // await updateDbTask(task);
 
       // @ts-ignore
       dispatch(updateTask(task));

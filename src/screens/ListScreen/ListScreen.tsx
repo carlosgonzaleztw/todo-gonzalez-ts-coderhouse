@@ -14,15 +14,22 @@ import {
   unselectTasks,
   updateTask,
 } from '../../store/reducers/task.slice';
-import { deleteDbTask, updateDbTask } from '../../db/db.index';
-import { AuthContext } from '../../Root';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'List'>;
 
-const ListScreen = ({ navigation }: Props) => {
+const ListScreen = async ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
-  const user = useContext(AuthContext);
-  console.log('user in ListScreen', user?.uid);
+  // const user = useContext(AuthContext);
+  // console.log('user in ListScreen', user?.uid);
+
+  // try {
+  //   // const dbTasks = await getAllDbTasks(user as User);
+  //   // console.log('dbTasks', dbTasks);
+  //   // dispatch(loadTasks(dbTasks));
+  // } catch (error) {
+  //   console.log('error in ListScreen', error);
+  // }
+
   const TASK_LIST = useAppSelector((state) => state.tasks.list);
 
   const [tasks, setTasks] = useState<TaskType[]>(TASK_LIST);
@@ -32,7 +39,7 @@ const ListScreen = ({ navigation }: Props) => {
   const handleTaskCheckChange = async (task: TaskType) => {
     const updatedTask = { ...task, isChecked: !task.isChecked };
     try {
-      await updateDbTask(updatedTask);
+      // await updateDbTask(updatedTask);
 
       // @ts-ignore
       dispatch(updateTask(updatedTask));
@@ -43,7 +50,7 @@ const ListScreen = ({ navigation }: Props) => {
 
   const handleTaskDelete = async (id: number) => {
     try {
-      await deleteDbTask(id);
+      // await deleteDbTask(id);
       dispatch(deleteTask(id));
     } catch (error) {
       console.log(error);

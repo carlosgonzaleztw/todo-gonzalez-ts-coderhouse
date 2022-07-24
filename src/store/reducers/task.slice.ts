@@ -20,8 +20,8 @@ export const taskSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    loadTasks: (state: TaskState, { payload }: PayloadAction<TaskType[]>) => {
-      state.list = payload;
+    loadTasks: (state: TaskState, action: PayloadAction<TaskType[]>) => {
+      state.list = action.payload;
     },
     selectTask: (state: TaskState, { payload }: PayloadAction<number>) => {
       const selectedTask = state.list.find((task) => task.id === payload);
@@ -49,7 +49,13 @@ export const taskSlice = createSlice({
   },
 });
 
-export const { selectTask, unselectTasks, createTask, deleteTask, updateTask } =
-  taskSlice.actions;
+export const {
+  // loadTasks,
+  selectTask,
+  unselectTasks,
+  createTask,
+  deleteTask,
+  updateTask,
+} = taskSlice.actions;
 
 export default taskSlice.reducer;

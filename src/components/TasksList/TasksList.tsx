@@ -1,8 +1,7 @@
-import { StyleSheet, View, Text, FlatList } from 'react-native';
-import React, { useContext } from 'react';
+import { StyleSheet, FlatList } from 'react-native';
+import React from 'react';
 import Task from '../common/Task/Task';
 import { TaskType } from '../../types/task.type';
-import { AuthContext } from '../../Root';
 
 type Props = {
   tasks: TaskType[];
