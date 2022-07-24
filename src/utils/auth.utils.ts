@@ -1,6 +1,15 @@
-import { getAuth, signInAnonymously } from 'firebase/auth';
+import { getAuth, signInAnonymously, User } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 
-const getUser = async () => {
+export const useFirebaseAuth = () => {
   const auth = getAuth();
-  const isSignedIn = await signInAnonymously(auth);
+  signInAnonymously(auth);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user: User | null) => {
+      user ? setUser(user) : setUser(null);
+    });
+  }, []);
+  return user;
 };

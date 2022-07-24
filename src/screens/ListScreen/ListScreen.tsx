@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import TasksList from '../../components/TasksList/TasksList';
 import Header from '../../components/common/Header/Header';
 import CustomText from '../../components/common/CustomText/CustomText';
@@ -15,11 +15,14 @@ import {
   updateTask,
 } from '../../store/reducers/task.slice';
 import { deleteDbTask, updateDbTask } from '../../db/db.index';
+import { AuthContext } from '../../Root';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'List'>;
 
 const ListScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
+  const user = useContext(AuthContext);
+  console.log('user in ListScreen', user?.uid);
   const TASK_LIST = useAppSelector((state) => state.tasks.list);
 
   const [tasks, setTasks] = useState<TaskType[]>(TASK_LIST);
